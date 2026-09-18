@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Maintenance Tracker</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚗 Car Maintenance Tracker</h1>
+        <h2>Add Service Record</h2>
+
+        <form action="/services" method="post">
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date">
+
+            <label for="workDone">Work Done:</label>
+            <input type="text" id="workDone" name="workDone"
+                   placeholder="Example: Oil Change">
+
+            <label for="mileage">Mileage:</label>
+            <input type="number" id="mileage" name="mileage"
+                   placeholder="Example: 75000">
+
+            <label for="category">Category:</label>
+
+            <div>
+                <input type="radio" id="maintenance" name="category"
+                       value="Maintenance">
+                <label for="maintenance">Maintenance</label>
+
+                <input type="radio" id="repair" name="category"
+                       value="Repair">
+                <label for="repair">Repair</label>
+            </div>
+
+            <label for="cost">Cost:</label>
+            <input type="number" id="cost" name="cost"
+                   step="0.01" placeholder="Example: 50.00">
+
+            <br>
+            <br>
+            <button type="submit">Save Entry</button>
+        </form>
+
+        <h2>Service History</h2>
+
+        <div class="filters">
+            <a href="/">
+                <button type="button">All</button>
+            </a>
+        
+            <a href="/?category=Maintenance">
+                <button type="button">Maintenance</button>
+            </a>
+        
+            <a href="/?category=Repair">
+                <button type="button">Repair</button>
+            </a>
+        </div>
+        
+        <div th:if="${entries.isEmpty()}">
+            <p>No service records yet.</p>
+        </div>
+
+        <table th:unless="${entries.isEmpty()}">
+
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Work Done</th>
+                <th>Mileage</th>
+                <th>Category</th>
+                <th>Cost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="entry : ${entries}">
+                <td th:text="${entry.date}"></td>
+                <td th:text="${entry.workDone}"></td>
+                <td th:text="${entry.mileage}"></td>
+                <td th:text="${entry.category}"></td>
+                <td th:text="${'$' + #numbers.formatDecimal(entry.cost, 1, 2)}"></td>
+            
+                <td>
+                    <a th:href="@{/services/edit(id=${entry.id})}">
+                        <button type="button">Edit</button>
+                    </a>
+                
+                    <form action="/services/delete" method="post">
+                        <input type="hidden" name="id" th:value="${entry.id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

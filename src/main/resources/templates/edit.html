@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Service Record</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔧 Car Maintenance Tracker</h1>
+        <h2>Edit Service Record</h2>
+
+        <form action="/services/update" method="post">
+
+            <input type="hidden" name="id" th:value="${entry.id}">
+
+            <label for="date">Date:</label>
+            <input type="date"
+                   id="date"
+                   name="date"
+                   th:value="${entry.date}">
+
+            <label for="workDone">Work Done:</label>
+            <input type="text"
+                   id="workDone"
+                   name="workDone"
+                   th:value="${entry.workDone}">
+
+            <label for="mileage">Mileage:</label>
+            <input type="number"
+                   id="mileage"
+                   name="mileage"
+                   th:value="${entry.mileage}">
+
+            <label for="category">Category:</label>
+
+            <div>
+                <input type="radio"
+                       id="maintenance"
+                       name="category"
+                       value="Maintenance"
+                       th:checked="${entry.category == 'Maintenance'}">
+
+                <label for="maintenance">Maintenance</label>
+
+                <input type="radio"
+                       id="repair"
+                       name="category"
+                       value="Repair"
+                       th:checked="${entry.category == 'Repair'}">
+
+                <label for="repair">Repair</label>
+            </div>
+
+            <label for="cost">Cost:</label>
+            <input type="number"
+                   id="cost"
+                   name="cost"
+                   step="0.01"
+                   th:value="${entry.cost}">
+            
+            <br>
+            <br>
+            <button type="submit">Update Entry</button>
+
+        </form>
+
+        <br>
+
+        <a href="/">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</body>
+</html>
