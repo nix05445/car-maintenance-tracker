@@ -50,7 +50,7 @@ public class ServiceManager {
         String sql = """
                 SELECT id, date, work_done, mileage, category, cost
                 FROM service_entries
-                ORDER BY mileage
+                ORDER BY mileage DESC
                 """;
 
         try (Connection connection = databaseManager.getConnection();
@@ -84,7 +84,7 @@ public class ServiceManager {
                 SELECT id, date, work_done, mileage, category, cost
                 FROM service_entries
                 WHERE category = ?
-                ORDER BY mileage
+                ORDER BY mileage DESC
                 """;
     
         try (Connection connection = databaseManager.getConnection();

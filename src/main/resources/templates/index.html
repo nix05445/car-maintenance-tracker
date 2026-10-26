@@ -49,6 +49,30 @@
             <button type="submit">Save Entry</button>
         </form>
 
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total Entries</h3>
+                <h2 th:text="${totalEntries}">0</h2>
+            </div>
+        
+            <div class="card">
+                <h3>Maintenance</h3>
+                <h2 th:text="${maintenanceCount}">0</h2>
+            </div>
+        
+            <div class="card">
+                <h3>Repairs</h3>
+                <h2 th:text="${repairCount}">0</h2>
+            </div>
+        
+            <div class="card">
+                <h3>Total Spent</h3>
+                <h2>
+                    $<span th:text="${#numbers.formatDecimal(totalSpent, 1, 2)}">0.00</span>
+                </h2>
+            </div>
+        </div>
+
         <h2>Service History</h2>
 
         <div class="filters">
@@ -64,7 +88,7 @@
                 <button type="button">Repair</button>
             </a>
         </div>
-        
+
         <div th:if="${entries.isEmpty()}">
             <p>No service records yet.</p>
         </div>
@@ -85,7 +109,18 @@
         <tbody>
             <tr th:each="entry : ${entries}">
                 <td th:text="${entry.date}"></td>
-                <td th:text="${entry.workDone}"></td>
+                <td>
+                    <div class="work-description">
+                        <span class="description-text"
+                            th:text="${entry.workDone}"></span>
+
+                        <button type="button"
+                                class="see-more-btn"
+                                onclick="toggleDescription(this)">
+                            See more
+                        </button>
+                    </div>
+                </td>
                 <td th:text="${entry.mileage}"></td>
                 <td th:text="${entry.category}"></td>
                 <td th:text="${'$' + #numbers.formatDecimal(entry.cost, 1, 2)}"></td>
@@ -102,7 +137,39 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+        </table>
     </div>
+
+
+    <script>
+        function setupDescriptions() {
+            document.querySelectorAll(".work-description").forEach(function (container) {
+                const text = container.querySelector(".description-text");
+                const button = container.querySelector(".see-more-btn");
+
+                container.classList.remove("expanded");
+
+                if (text.scrollHeight > text.clientHeight + 1) {
+                    container.classList.add("has-overflow");
+                    button.style.display = "inline-block";
+                } else {
+                    container.classList.remove("has-overflow");
+                    button.style.display = "none";
+                }
+            });
+        }
+
+        function toggleDescription(button) {
+            const container = button.closest(".work-description");
+            container.classList.toggle("expanded");
+
+            button.textContent = container.classList.contains("expanded")
+                ? "See less"
+                : "See more";
+        }
+
+        document.addEventListener("DOMContentLoaded", setupDescriptions);
+        window.addEventListener("resize", setupDescriptions);
+    </script>
 </body>
 </html>
